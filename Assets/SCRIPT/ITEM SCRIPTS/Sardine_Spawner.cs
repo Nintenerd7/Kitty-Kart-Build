@@ -18,7 +18,7 @@ child.name = "Sardine";
 
 }
 
-public    void Block()
+public  void Block()
     {
         switch(Item_Randomizer.is_Usable)
         {
@@ -29,7 +29,6 @@ public    void Block()
 
           case false:
           DefencePos.SetActive(false);
-          child.transform.parent = null;
           break;
         }
     }    
