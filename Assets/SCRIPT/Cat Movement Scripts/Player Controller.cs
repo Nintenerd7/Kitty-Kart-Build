@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-  public static float DashSpeed = 10;
-   [SerializeField] public static float speed = 0;
+  //public float DashSpeed = 10;
+  public float SpeedCap;
+   float speed = 0;
+   public float velocity = 0.5f;
     public float turn_Speed;
 
     private Rigidbody rb;
@@ -16,29 +18,34 @@ public class PlayerController : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    void Update()
     {
       Controls();
     }
+public void Accelerator()
+{
+ SpeedCap = speed + velocity;
+ SpeedCap++;
 
-   public void Controls()
+ if(SpeedCap >=5)
+ {
+  SpeedCap = 5f;//max speed
+ }
+   if(Input.GetKey(KeyCode.Space))
    {
-        if(Input.GetKey(KeyCode.W))
-        {
-          speed = 10;
-          rb.AddRelativeForce(Vector3.forward * speed);
-        }
-        if(Input.GetKey(KeyCode.Space))
-        {
-          speed --;
-          if(speed <= 0)
+          SpeedCap --;
+          if(SpeedCap <= 0)
           {
-            speed = 0;
+            SpeedCap = 0;
           }
         }
-         if(Input.GetKey(KeyCode.S))
+}
+   public void Controls()
+   {
+        if(Input.GetKey(KeyCode.S))
         {
-        rb.AddRelativeForce(-Vector3.forward * speed);
+          Accelerator();
+          rb.AddRelativeForce(Vector3.forward * SpeedCap);
         }
 
          if(Input.GetKey(KeyCode.D))
@@ -51,8 +58,4 @@ public class PlayerController : MonoBehaviour
           rb.AddTorque(-Vector3.up * turn_Speed);
         }
    }
-    public static void DashAccelerator()
-    {
-       speed +=DashSpeed;
-    }
 }

@@ -16,12 +16,11 @@ public class Milk : MonoBehaviour
 
     public IEnumerator DashBoost()
     {
-        PlayerController.DashAccelerator();
-        Debug.Log("Dashing now Speed is at:" + PlayerController.speed);
+ 
          isDashing = true;
          yield return new WaitForSeconds(0.4f);
-         PlayerController.speed = 10;
-         Debug.Log("Dashing Has returned to:" + PlayerController.speed);
+
+      
          isDashing = false;
     }
 }
