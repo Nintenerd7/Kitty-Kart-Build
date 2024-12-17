@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
    float speed = 0;
    public float velocity = 0.5f;
     public float turn_Speed;
-
+     public Drift boost;
     private Rigidbody rb;
     // Start is called before the first frame update
     void Start()
@@ -56,6 +56,12 @@ public void Accelerator()
         if(Input.GetKey(KeyCode.A))
         {
           rb.AddTorque(-Vector3.up * turn_Speed);
+        }
+        if(Input.GetMouseButtonDown(0))
+        {
+           Debug.Log("Drifting");
+           boost.isDrifting = true;
+           boost.StartCoroutine(boost.Drifting_QUEUE());
         }
    }
 }
