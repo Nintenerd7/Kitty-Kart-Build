@@ -4,20 +4,23 @@ using UnityEngine;
 
 public class Player_Controller : MonoBehaviour
 {
-     public float SpeedCap;
+  //SPEED AND FORCE VARIABLES
+   public float SpeedCap;
    float speed = 0;
-   public float velocity = 0.5f;
+   public float velocity;
   public float jumpforce = 1f;
   public int CanDrift = 1;
-   
-   public float DriftPower = 1;
+  public float DriftPower;
+  public float turn_Speed;
+  //BOOLEANS
   public bool isDrifting = false;
-    public float turn_Speed;
+  public bool isSteeringRight;
+  public Drfit_Mechanic boost;
     private Rigidbody rb;
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        rb = GetComponent<Rigidbody>();//gets rigidbody
     }
 
     // Update is called once per frame
@@ -28,20 +31,7 @@ public class Player_Controller : MonoBehaviour
      void Accelerator()
 {
  SpeedCap = speed + velocity;
- SpeedCap++;
 
- if(SpeedCap >=20)
- {
-  SpeedCap = 20f;//max speed
- }
-   if(Input.GetKey(KeyCode.Space))
-   {
-          SpeedCap --;
-          if(SpeedCap <= 0)
-          {
-            SpeedCap = 0;
-          }
-        }
 }
    public void Controls()
    {
@@ -63,16 +53,21 @@ public class Player_Controller : MonoBehaviour
         //DRIFT
         if(Input.GetMouseButtonDown(0))
         {
-          Initiate_Drift();
+         Initiate_Drift();
         }
         if(Input.GetMouseButtonUp(0))
         {
-          isDrifting = false;
-          SpeedCap += DriftPower;//drift speed added to normal speed
-          Debug.Log("ZOOM");
+          StopCoroutine(Drift());
+          StartCoroutine(TurboDrift());//turbo starts
+        }
+        if (Input.GetKey(KeyCode.Space))
+        {
+          SpeedCap = 0; 
         }
         //Item Shooter button
    }
+  #region DRIFTING SECTION
+
     void Initiate_Drift()
 {
    //player hops
@@ -83,27 +78,29 @@ public class Player_Controller : MonoBehaviour
   {
      jumpforce = 0;
             //start the drift coroutine
-            Drift();
+     StartCoroutine(Drift());
   }
 }
 
- void Drift()
+ public IEnumerator Drift()
 {
-  DriftPower++;
+boost.Blue_Boost();
+yield return new WaitForSeconds(2f);
+boost.Orange_Boost();
+yield return new WaitForSeconds(2f);
+boost.Purple_Boost();
+yield break;
 
-  if (DriftPower <=5)
-  {
-    Debug.Log("blue sparks");
-  }
-    if (DriftPower <=10)
-  {
-    Debug.Log("orange sparks");
-  }
-    if (DriftPower <=15)
-  {
-    Debug.Log("purple sparks");
-  }
 }
+
+public IEnumerator TurboDrift()
+{
+          Debug.Log("ZOOM");
+          velocity += DriftPower;//drift speed added to normal speed to create turbo
+         yield return new WaitForSeconds(1f);
+         boost.Reset_Values();//sets values back to normal
+}
+#endregion
 }
 
 
